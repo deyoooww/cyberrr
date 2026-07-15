@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TopUpPro - Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        /* ================================================================ */
+        /* CSS PREMIUM - LIQUID GLASS + ANIMASI                            */
+        /* ================================================================ */
+
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --primary:#6C63FF;
+            --primary-light:#8B83FF;
+            --primary-dark:#5A52D5;
+            --secondary:#FF6584;
+            --accent:#00D2FF;
+            --gold:#FFD700;
+            --gradient-1:linear-gradient(135deg,#6C63FF 0%,#00D2FF 100%);
+            --gradient-2:linear-gradient(135deg,#FF6584 0%,#FF9A76 100%);
+            --gradient-gold:linear-gradient(135deg,#FFD700 0%,#FFA500 100%);
+            --bg-primary:#0A0A1A;
+            --bg-secondary:#12122A;
+            --glass:rgba(255,255,255,0.04);
+            --glass-border:rgba(255,255,255,0.06);
+            --glass-shadow:0 8px 32px rgba(0,0,0,0.4);
+            --text-primary:#FFFFFF;
+            --text-secondary:#B0B0D0;
+            --text-muted:#6B6B8A;
+            --radius-sm:12px;
+            --radius-md:20px;
+            --radius-lg:30px;
+            --radius-xl:40px;
+            --transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
+        }
+        [data-theme="light"]{
+            --bg-primary:#F0F2F5;
+            --bg-secondary:#FFFFFF;
+            --glass:rgba(255,255,255,0.6);
+            --glass-border:rgba(255,255,255,0.3);
+            --text-primary:#1A1A2E;
+            --text-secondary:#4A4A6A;
+            --text-muted:#8A8AAA;
+        }
+
+        html{scroll-behavior:smooth}
+        body{font-family:'Inter',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;transition:var(--transition);overflow-x:hidden;padding-bottom:80px}
+
+        /* ===== BG ANIMATION ===== */
+        .bg-animation{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+        .bg-animation .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.08;animation:orbFloat 25s infinite ease-in-out}
+        .bg-animation .orb:nth-child(1){width:600px;height:600px;background:var(--primary);top:-15%;left:-10%;animation-delay:0s}
+        .bg-animation .orb:nth-child(2){width:450px;height:450px;background:var(--secondary);bottom:-10%;right:-5%;animation-delay:-7s}
+        .bg-animation .orb:nth-child(3){width:350px;height:350px;background:var(--accent);top:40%;left:40%;animation-delay:-14s}
+
+        @keyframes orbFloat{
+            0%,100%{transform:translate(0,0) scale(1)}
+            25%{transform:translate(60px,-70px) scale(1.15)}
+            50%{transform:translate(-40px,40px) scale(0.85)}
+            75%{transform:translate(50px,30px) scale(1.05)}
+        }
+
+        /* ===== GLASSMORPHISM ===== */
+        .glass{
+            background:var(--glass);
+            backdrop-filter:blur(20px);
+            -webkit-backdrop-filter:blur(20px);
+            border:1px solid var(--glass-border);
+            box-shadow:var(--glass-shadow);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+        @keyframes fadeInScale{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+        @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+        @keyframes pulseGlow{0%,100%{box-shadow:0 0 20px rgba(108,92,231,0.15)}50%{box-shadow:0 0 40px rgba(108,92,231,0.3)}}
+        @keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes rotateSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+        .animate-fade{animation:fadeInUp 0.7s ease both}
+        .animate-scale{animation:fadeInScale 0.6s ease both}
+        .animate-slide{animation:slideInRight 0.6s ease both}
+        .animate-float{animation:floatY 4s ease-in-out infinite}
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+
+        /* ===== TOAST ===== */
+        .toast-container{position:fixed;top:80px;right:20px;z-index:99999;display:flex;flex-direction:column;gap:12px;max-width:400px;width:100%}
+        .toast{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px 20px;display:flex;align-items:center;gap:12px;animation:slideInRight 0.5s ease;box-shadow:var(--glass-shadow)}
+        .toast.removing{animation:slideOutRight 0.5s ease forwards}
+        .toast .toast-icon{font-size:24px;flex-shrink:0}
+        .toast .toast-icon.success{color:#00D2FF}
+        .toast .toast-icon.error{color:#FF6584}
+        .toast .toast-icon.warning{color:#FFD93D}
+        .toast .toast-icon.info{color:var(--primary)}
+        .toast .toast-content{flex:1}
+        .toast .toast-content .toast-title{font-weight:700;font-size:0.95rem}
+        .toast .toast-content .toast-message{font-size:0.85rem;color:var(--text-secondary)}
+        .toast .toast-close{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:18px;transition:var(--transition)}
+        .toast .toast-close:hover{color:var(--text-primary)}
+        @keyframes slideOutRight{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(100px)}}
+
+        /* ===== NAVBAR ===== */
+        .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:12px 32px;background:rgba(10,10,26,0.7);backdrop-filter:blur(30px);border-bottom:1px solid var(--glass-border);display:flex;align-items:center;justify-content:space-between;transition:var(--transition)}
+        [data-theme="light"] .navbar{background:rgba(255,255,255,0.7)}
+        .navbar.scrolled{padding:8px 32px;background:rgba(10,10,26,0.9);box-shadow:0 4px 40px rgba(0,0,0,0.3)}
+        .logo{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:900;background:var(--gradient-1);background-size:200% auto;animation:gradientShift 4s ease infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer}
+        .logo i{font-size:28px;-webkit-text-fill-color:var(--primary)}
+        .nav-actions{display:flex;align-items:center;gap:12px}
+        .nav-actions button{background:var(--glass);border:1px solid var(--glass-border);color:var(--text-secondary);font-size:18px;cursor:pointer;transition:var(--transition);padding:8px;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);position:relative}
+        .nav-actions button:hover{color:var(--text-primary);background:rgba(108,92,231,0.15);transform:translateY(-2px)}
+        .nav-actions .badge-count{position:absolute;top:-4px;right:-4px;background:var(--secondary);color:#fff;font-size:9px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg-primary)}
+        .profile-btn{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px !important;border-radius:var(--radius-xl) !important;background:var(--glass) !important;border:1px solid var(--glass-border) !important}
+        .profile-btn .avatar{width:32px;height:32px;border-radius:50%;background:var(--gradient-1);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;overflow:hidden}
+        .profile-btn .avatar img{width:100%;height:100%;object-fit:cover}
+        .profile-btn .username{font-size:0.85rem;font-weight:600;color:var(--text-primary);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .premium-badge-nav{background:var(--gradient-gold);color:#000;font-size:0.5rem;font-weight:700;padding:2px 8px;border-radius:var(--radius-xl);margin-left:4px}
+        #loginBtn{background:var(--gradient-1);color:#fff;padding:8px 20px;border-radius:var(--radius-xl);font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition)}
+        #loginBtn:hover{transform:scale(1.04);box-shadow:0 4px 25px rgba(108,92,231,0.3)}
+
+        /* ===== PAGE SYSTEM ===== */
+        .page{display:none;padding:20px;max-width:900px;margin:0 auto;animation:fadeInUp 0.6s ease}
+        .page.active{display:block}
+        .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:1000;background:rgba(10,10,26,0.85);backdrop-filter:blur(30px);border-top:1px solid var(--glass-border);display:flex;justify-content:space-around;padding:8px 0 12px;transition:var(--transition)}
+        [data-theme="light"] .bottom-nav{background:rgba(255,255,255,0.85)}
+        .bottom-nav .nav-item{background:none;border:none;color:var(--text-muted);font-size:0.6rem;cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:2px;font-family:'Inter',sans-serif;padding:4px 16px;border-radius:var(--radius-sm);position:relative}
+        .bottom-nav .nav-item i{font-size:18px;transition:var(--transition)}
+        .bottom-nav .nav-item:hover{color:var(--text-primary)}
+        .bottom-nav .nav-item.active{color:var(--primary)}
+        .bottom-nav .nav-item.active i{transform:translateY(-3px)}
+
+        /* ===== HERO ===== */
+        .hero{padding:70px 20px 30px;text-align:center;max-width:900px;margin:0 auto}
+        .hero-badge{display:inline-block;background:var(--glass);border:1px solid var(--glass-border);padding:8px 24px;border-radius:var(--radius-xl);font-size:0.8rem;color:var(--primary-light);margin-bottom:20px;backdrop-filter:blur(10px)}
+        .hero h1{font-size:2.8rem;font-weight:900;line-height:1.1;margin-bottom:20px;background:linear-gradient(135deg,#fff 20%,var(--primary-light) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .hero p{font-size:1.1rem;color:var(--text-secondary);max-width:600px;margin:0 auto 30px}
+        .hero-stats{display:flex;justify-content:center;gap:50px}
+        .hero-stats .stat{text-align:center}
+        .hero-stats .stat .number{font-size:1.8rem;font-weight:800;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .hero-stats .stat .label{font-size:0.85rem;color:var(--text-muted)}
+
+        /* ===== SEARCH ===== */
+        .search-box{display:flex;align-items:center;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:4px 4px 4px 24px;transition:var(--transition);backdrop-filter:blur(10px);margin-bottom:20px;max-width:800px;margin-left:auto;margin-right:auto}
+        .search-box:focus-within{border-color:rgba(108,92,231,0.3);box-shadow:0 0 40px rgba(108,92,231,0.05)}
+        .search-box i{color:var(--text-muted)}
+        .search-box input{flex:1;background:transparent;border:none;outline:none;padding:14px 12px;color:var(--text-primary);font-size:1rem;font-family:'Inter',sans-serif}
+        .search-box input::placeholder{color:var(--text-muted)}
+        .search-box .btn-search{background:var(--gradient-1);border:none;padding:12px 28px;border-radius:var(--radius-xl);color:#fff;font-weight:700;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif}
+        .search-box .btn-search:hover{transform:scale(1.04);box-shadow:0 4px 25px rgba(108,92,231,0.3)}
+
+        /* ===== FILTER ===== */
+        .filter-section{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:30px}
+        .filter-btn{background:var(--glass);border:1px solid var(--glass-border);padding:8px 20px;border-radius:var(--radius-xl);color:var(--text-secondary);font-weight:600;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif;font-size:0.8rem;display:flex;align-items:center;gap:6px;backdrop-filter:blur(10px)}
+        .filter-btn:hover{color:var(--text-primary);transform:translateY(-2px)}
+        .filter-btn.active{background:var(--gradient-1);color:#fff;border-color:transparent;box-shadow:0 4px 25px rgba(108,92,231,0.2)}
+
+        /* ===== PRODUCT GRID ===== */
+        .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;max-width:1400px;margin:0 auto}
+        .product-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:20px 16px 18px;text-align:center;transition:var(--transition);cursor:pointer;backdrop-filter:blur(12px);animation:pulseGlow 3s ease-in-out infinite;position:relative}
+        .product-card:hover{transform:translateY(-8px) scale(1.02);border-color:rgba(108,92,231,0.2);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+        .product-icon{width:64px;height:64px;margin:0 auto 10px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;transition:var(--transition);background:rgba(108,92,231,0.08);overflow:hidden;border:1px solid var(--glass-border)}
+        .product-card:hover .product-icon{transform:scale(1.1) rotate(-5deg)}
+        .product-icon img{width:100%;height:100%;object-fit:cover}
+        .product-card .badge{position:absolute;top:10px;right:10px;padding:4px 12px;border-radius:var(--radius-xl);font-size:0.55rem;font-weight:700;text-transform:uppercase;z-index:2}
+        .badge.popular{background:var(--gradient-2);color:#fff}
+        .badge.new{background:var(--gradient-2);color:#fff}
+        .badge.sale{background:var(--gradient-gold);color:#000}
+        .product-card .wishlist-btn{position:absolute;top:10px;left:10px;background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;transition:var(--transition);z-index:2}
+        .product-card .wishlist-btn:hover{color:var(--secondary);transform:scale(1.2)}
+        .product-card .wishlist-btn.active{color:var(--secondary)}
+        .product-card h3{font-size:1rem;font-weight:700;margin-bottom:2px}
+        .product-card .price{font-size:1.1rem;font-weight:800;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:6px 0}
+        .product-card .original-price{font-size:0.75rem;color:var(--text-muted);text-decoration:line-through;margin-left:6px}
+        .product-card .rating{color:#FFD93D;font-size:0.8rem;margin-bottom:4px}
+        .product-card .rating span{color:var(--text-secondary);margin-left:4px}
+        .product-card .category-tag{display:inline-block;background:rgba(108,92,231,0.08);padding:2px 12px;border-radius:var(--radius-xl);font-size:0.55rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+        .product-card .btn-order{width:100%;padding:10px;background:var(--gradient-1);border:none;border-radius:var(--radius-xl);color:#fff;font-weight:700;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif;font-size:0.85rem;display:flex;align-items:center;justify-content:center;gap:8px}
+        .product-card .btn-order:hover{transform:scale(1.04);box-shadow:0 4px 25px rgba(108,92,231,0.3)}
+
+        /* ===== CHECKOUT MODAL ===== */
+        .checkout-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(30px);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;animation:fadeInUp 0.4s ease}
+        .checkout-modal.active{display:flex}
+        .checkout-box{background:var(--glass);backdrop-filter:blur(30px);border:1px solid var(--glass-border);border-radius:var(--radius-md);max-width:500px;width:100%;padding:28px 24px;max-height:90vh;overflow-y:auto;animation:fadeInScale 0.5s ease;box-shadow:0 40px 80px rgba(0,0,0,0.5)}
+        .checkout-box .checkout-close{float:right;background:none;border:none;color:var(--text-muted);font-size:24px;cursor:pointer;transition:var(--transition)}
+        .checkout-box .checkout-close:hover{color:var(--text-primary);transform:rotate(90deg)}
+        .checkout-box .checkout-title{font-size:1.3rem;font-weight:700;margin-bottom:4px}
+        .checkout-box .checkout-sub{color:var(--text-secondary);font-size:0.9rem;margin-bottom:16px}
+        .checkout-box label{font-weight:600;display:block;margin:12px 0 4px;font-size:0.85rem;color:var(--text-secondary)}
+        .checkout-box select{width:100%;padding:12px 16px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:1rem;font-family:'Inter',sans-serif;margin-bottom:4px;backdrop-filter:blur(10px)}
+        .checkout-box select:focus{border-color:rgba(108,92,231,0.3);outline:none}
+
+        /* ===== REQUIRED FIELD ===== */
+        .required-star{color:#FF6B6B;margin-left:4px}
+
+        .paket-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:8px;max-height:250px;overflow-y:auto;padding:4px}
+        .paket-list::-webkit-scrollbar{width:4px}
+        .paket-list::-webkit-scrollbar-track{background:transparent}
+        .paket-list::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
+        .paket-item{background:var(--glass);border:2px solid var(--glass-border);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;cursor:pointer;transition:var(--transition);backdrop-filter:blur(10px)}
+        .paket-item:hover{border-color:rgba(108,92,231,0.3);transform:scale(1.03)}
+        .paket-item.active{border-color:var(--primary);background:rgba(108,92,231,0.08);box-shadow:0 0 30px rgba(108,92,231,0.05)}
+        .paket-item .pkg-price{font-weight:700;font-size:0.85rem;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .paket-item .pkg-label{font-size:0.65rem;color:var(--text-secondary)}
+        .paket-item .pkg-badge{display:inline-block;font-size:0.4rem;padding:2px 8px;border-radius:var(--radius-xl);margin-top:2px}
+        .pkg-badge.best{background:var(--gradient-1);color:#fff}
+        .pkg-badge.populer{background:var(--gradient-2);color:#fff}
+        .pkg-badge.hemat{background:var(--gradient-gold);color:#000}
+
+        .topup-id-input{display:flex;gap:12px;flex-wrap:wrap}
+        .topup-id-input input{flex:1;padding:12px 18px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:1rem;font-family:'Inter',sans-serif;transition:var(--transition);backdrop-filter:blur(10px)}
+        .topup-id-input input:focus{border-color:rgba(108,92,231,0.3);outline:none}
+        .topup-id-input input.error{border-color:#FF6B6B;box-shadow:0 0 20px rgba(255,107,107,0.1)}
+
+        .topup-payments{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:4px}
+        .topup-payment{background:var(--glass);border:2px solid var(--glass-border);border-radius:var(--radius-sm);padding:10px 6px;text-align:center;cursor:pointer;transition:var(--transition);backdrop-filter:blur(10px)}
+        .topup-payment:hover{border-color:rgba(108,92,231,0.3);transform:scale(1.03)}
+        .topup-payment.active{border-color:var(--primary);background:rgba(108,92,231,0.08)}
+        .topup-payment img{width:36px;height:36px;object-fit:contain;display:block;margin:0 auto 3px;border-radius:4px}
+        .topup-payment .pm-name{font-size:0.6rem;font-weight:600;color:var(--text-secondary)}
+
+        .topup-summary{background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);padding:14px 16px;margin-top:16px;border:1px solid var(--glass-border)}
+        .topup-summary .summary-row{display:flex;justify-content:space-between;padding:4px 0;font-size:0.9rem}
+        .topup-summary .summary-row.total{border-top:2px solid var(--glass-border);padding-top:10px;margin-top:4px;font-weight:700;font-size:1.05rem}
+        .topup-summary .summary-row.total .total-price{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+        .topup-actions{display:flex;gap:12px;margin-top:16px}
+        .topup-actions button{flex:1;padding:12px;border:none;border-radius:var(--radius-xl);font-weight:700;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif;font-size:0.9rem;display:flex;align-items:center;justify-content:center;gap:8px}
+        .topup-actions .btn-cancel{background:var(--glass);color:var(--text-secondary);border:1px solid var(--glass-border)}
+        .topup-actions .btn-cancel:hover{background:rgba(255,255,255,0.05)}
+        .topup-actions .btn-pay{background:var(--gradient-1);color:#fff;flex:2}
+        .topup-actions .btn-pay:hover{transform:scale(1.02);box-shadow:0 4px 25px rgba(108,92,231,0.3)}
+        .topup-actions .btn-pay:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+        /* ===== SUCCESS MODAL ===== */
+        .success-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(30px);z-index:99998;display:none;align-items:center;justify-content:center;padding:20px}
+        .success-modal.active{display:flex}
+        .success-box{background:var(--glass);backdrop-filter:blur(30px);border:1px solid var(--glass-border);border-radius:var(--radius-md);max-width:440px;width:100%;padding:32px 28px;text-align:center;animation:fadeInScale 0.6s ease;box-shadow:0 40px 80px rgba(0,0,0,0.5)}
+        .success-box .success-icon{font-size:72px;color:#00D2FF;margin-bottom:12px;animation:pulseGlow 1.5s ease infinite}
+        .success-box .success-title{font-size:1.8rem;font-weight:900;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .success-box .success-sub{color:var(--text-secondary);font-size:0.95rem;margin:4px 0 16px}
+        .success-box .success-details{background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);padding:16px;text-align:left;border:1px solid var(--glass-border);margin-bottom:16px}
+        .success-box .success-details .sd-row{display:flex;justify-content:space-between;padding:4px 0;font-size:0.85rem}
+        .success-box .success-details .sd-row.total{border-top:2px solid var(--glass-border);padding-top:10px;margin-top:4px;font-weight:700;font-size:1rem}
+        .success-box .success-details .sd-row.total .sd-total{background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .success-box .success-details .sd-status{display:inline-block;padding:3px 14px;border-radius:var(--radius-xl);font-size:0.75rem;font-weight:700;background:rgba(0,210,255,0.12);color:#00D2FF}
+        .success-box .btn-success-close{padding:12px 40px;background:var(--gradient-1);border:none;border-radius:var(--radius-xl);color:#fff;font-weight:700;font-size:0.95rem;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif}
+        .success-box .btn-success-close:hover{transform:scale(1.04);box-shadow:0 4px 25px rgba(108,92,231,0.3)}
+
+        /* ===== MP3 PLAYER ===== */
+        .mp3-player{background:var(--glass);border-radius:var(--radius-md);padding:20px;border:1px solid var(--glass-border);margin-bottom:16px;text-align:center;backdrop-filter:blur(12px)}
+        .now-playing-audio{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(108,92,231,0.04);border:1px solid var(--glass-border);border-radius:var(--radius-sm);margin-bottom:12px}
+        .now-playing-audio .left{display:flex;align-items:center;gap:10px}
+        .now-playing-audio .left i{color:var(--primary);font-size:16px;animation:rotateSlow 4s linear infinite}
+        .now-playing-audio .left .info{font-size:13px}
+        .now-playing-audio .left .info .title{font-weight:600}
+        .now-playing-audio .left .info .artist{color:var(--text-secondary);font-size:11px}
+        .now-playing-audio .right{font-size:11px;color:var(--text-muted)}
+        .mp3-embed{width:100%;border-radius:var(--radius-sm);border:none}
+        .playlist-section{margin-top:4px}
+        .playlist-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+        .playlist-header h3{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+        .playlist-header span{font-size:12px;color:var(--text-muted)}
+        .playlist-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-sm);margin-bottom:6px;cursor:pointer;transition:var(--transition);backdrop-filter:blur(10px)}
+        .playlist-item:hover{background:rgba(255,255,255,0.04);border-color:rgba(108,92,231,0.15);transform:translateX(4px)}
+        .playlist-item.active{border-color:rgba(108,92,231,0.3);background:rgba(108,92,231,0.04)}
+        .playlist-item .pl-left{display:flex;align-items:center;gap:12px}
+        .playlist-item .pl-left .pl-num{font-size:12px;font-weight:700;color:var(--text-muted);width:24px}
+        .playlist-item .pl-left .pl-title{font-weight:600;font-size:14px}
+        .playlist-item .pl-left .pl-artist{font-size:12px;color:var(--text-secondary)}
+        .playlist-item .pl-right{display:flex;align-items:center;gap:10px}
+        .playlist-item .pl-right .pl-status{font-size:12px;color:var(--text-muted)}
+        .playlist-item.active .pl-right .pl-status{color:var(--primary)}
+        .btn-play-now{background:rgba(108,92,231,0.06);border:none;padding:3px 14px;border-radius:var(--radius-xl);color:var(--primary);font-size:0.55rem;font-weight:700;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif}
+        .btn-play-now:hover{background:rgba(108,92,231,0.12);transform:scale(1.04)}
+        .shortcut-info{display:flex;justify-content:center;gap:16px;padding:12px 0 4px;font-size:11px;color:var(--text-muted)}
+
+        /* ===== GIFT ===== */
+        .gift-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
+        .gift-item{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px 8px;text-align:center;cursor:pointer;transition:var(--transition);backdrop-filter:blur(10px)}
+        .gift-item:hover{border-color:rgba(108,92,231,0.2);transform:translateY(-4px)}
+        .gift-item .gift-icon{font-size:28px;display:block;margin-bottom:4px}
+        .gift-item .gift-nominal{font-weight:700;font-size:0.85rem;color:var(--primary-light)}
+        .gift-item .gift-platform{font-size:0.65rem;color:var(--text-muted)}
+
+        /* ===== EVENT ===== */
+        .event-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:10px;border-left:3px solid var(--primary);transition:var(--transition);cursor:pointer;backdrop-filter:blur(10px)}
+        .event-card:hover{transform:translateX(4px);border-color:var(--primary)}
+        .event-card .event-title{font-weight:700;font-size:1rem}
+        .event-card .event-desc{font-size:0.85rem;color:var(--text-secondary);margin:4px 0 8px}
+        .event-card .btn-event{background:var(--gradient-1);border:none;padding:6px 18px;border-radius:var(--radius-xl);color:#fff;font-weight:700;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif;font-size:0.8rem}
+        .event-card .btn-event:hover{transform:scale(1.04)}
+
+        /* ===== PROFILE ===== */
+        .profile-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:32px 24px;text-align:center;backdrop-filter:blur(12px)}
+        .profile-card .profile-avatar-lg{width:80px;height:80px;border-radius:50%;background:var(--gradient-1);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:#fff;overflow:hidden;cursor:pointer;border:2px solid var(--glass-border)}
+        .profile-card .profile-avatar-lg img{width:100%;height:100%;object-fit:cover}
+        .profile-card .profile-name{font-size:1.2rem;font-weight:700}
+        .profile-card .profile-email{font-size:0.85rem;color:var(--text-secondary)}
+        .profile-card .profile-premium-badge{display:inline-block;padding:4px 16px;border-radius:var(--radius-xl);font-size:0.65rem;font-weight:700;margin:8px 0 16px}
+        .profile-card .profile-premium-badge.free{background:rgba(108,92,231,0.06);color:var(--text-secondary)}
+        .profile-card .profile-premium-badge.premium{background:var(--gradient-gold);color:#000}
+        .profile-stats{display:flex;justify-content:center;gap:40px;padding:12px 0;border-top:1px solid var(--glass-border);border-bottom:1px solid var(--glass-border);margin-bottom:16px}
+        .profile-stats .pstat{text-align:center}
+        .profile-stats .pstat .pnum{font-size:1.1rem;font-weight:700}
+        .profile-stats .pstat .plabel{font-size:0.7rem;color:var(--text-muted)}
+        .profile-menu-item{display:flex;justify-content:space-between;align-items:center;padding:12px 4px;border-bottom:1px solid var(--glass-border);cursor:pointer;transition:var(--transition)}
+        .profile-menu-item:hover{padding-left:12px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm)}
+        .profile-menu-item .pmi-left{display:flex;align-items:center;gap:12px}
+        .profile-menu-item .pmi-left i{width:20px;color:var(--text-muted)}
+        .profile-menu-item .pmi-left span{font-size:0.9rem}
+        .profile-menu-item .pmi-arrow{color:var(--text-muted)}
+        .profile-menu-item.danger .pmi-left span{color:#FF6B6B}
+        .btn-upgrade{width:100%;padding:12px;margin-top:12px;background:var(--gradient-gold);border:none;border-radius:var(--radius-xl);color:#000;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:var(--transition)}
+        .btn-upgrade:hover{transform:scale(1.02);box-shadow:0 4px 25px rgba(255,215,0,0.3)}
+        .btn-upgrade:disabled{opacity:0.5;cursor:not-allowed}
+
+        /* ===== AUTH ===== */
+        .auth-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(30px);z-index:99998;display:none;align-items:center;justify-content:center;padding:20px}
+        .auth-modal.active{display:flex}
+        .auth-box{background:var(--glass);backdrop-filter:blur(30px);border:1px solid var(--glass-border);border-radius:var(--radius-md);max-width:440px;width:100%;padding:32px 28px;animation:fadeInScale 0.4s ease;box-shadow:0 40px 80px rgba(0,0,0,0.5);position:relative}
+        .auth-box .auth-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--text-muted);font-size:24px;cursor:pointer;transition:var(--transition)}
+        .auth-box .auth-close:hover{color:var(--text-primary);transform:rotate(90deg)}
+        .auth-box .auth-header{text-align:center;margin-bottom:24px}
+        .auth-box .auth-header .auth-icon{font-size:48px;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+        .auth-box .auth-header h2{font-size:1.5rem}
+        .auth-box .auth-header p{color:var(--text-secondary);font-size:0.9rem}
+        .auth-box .auth-tabs{display:flex;gap:8px;margin-bottom:20px;background:var(--glass);border-radius:var(--radius-xl);padding:4px}
+        .auth-box .auth-tabs button{flex:1;padding:10px;border:none;border-radius:var(--radius-xl);background:transparent;color:var(--text-secondary);font-weight:600;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif}
+        .auth-box .auth-tabs button.active{background:var(--gradient-1);color:#fff}
+        .auth-box .auth-form{display:none}
+        .auth-box .auth-form.active{display:block}
+        .auth-box .auth-form label{font-weight:600;display:block;margin:12px 0 4px;font-size:0.85rem;color:var(--text-secondary)}
+        .auth-box .auth-form input{width:100%;padding:12px 16px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--text-primary);font-size:1rem;font-family:'Inter',sans-serif;transition:var(--transition)}
+        .auth-box .auth-form input:focus{border-color:rgba(108,92,231,0.3);outline:none}
+        .auth-box .auth-form .btn-auth{width:100%;padding:14px;margin-top:16px;background:var(--gradient-1);border:none;border-radius:var(--radius-xl);color:#fff;font-weight:700;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif;font-size:1rem}
+        .auth-box .auth-form .btn-auth:hover{transform:scale(1.02);box-shadow:0 4px 25px rgba(108,92,231,0.3)}
+
+        /* ===== VALIDASI ERROR ===== */
+        .error-text{color:#FF6B6B;font-size:0.75rem;margin-top:4px;display:none}
+        .error-text.show{display:block}
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:768px){
+            .navbar{padding:8px 16px}
+            .hero{padding:60px 16px 20px}
+            .hero h1{font-size:2rem}
+            .hero-stats{gap:24px;flex-wrap:wrap}
+            .product-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding:0 12px}
+            .profile-btn .username{display:none}
+            .nav-actions{gap:6px}
+            .nav-actions button{padding:6px;font-size:16px}
+            .bottom-nav .nav-item{padding:4px 10px;font-size:0.55rem}
+            .bottom-nav .nav-item i{font-size:16px}
+            .page{padding:12px;padding-top:70px}
+            .checkout-box{padding:20px 16px}
+            .paket-list{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}
+            .topup-payments{grid-template-columns:repeat(auto-fill,minmax(70px,1fr))}
+        }
+        @media(max-width:480px){
+            .hero h1{font-size:1.6rem}
+            .product-grid{grid-template-columns:1fr 1fr;gap:10px}
+            .product-card{padding:14px 10px}
+            .product-icon{width:50px;height:50px;font-size:20px}
+            .filter-btn{padding:5px 12px;font-size:0.7rem}
+            .bottom-nav .nav-item{padding:4px 6px;font-size:0.5rem}
+            .bottom-nav .nav-item i{font-size:14px}
+            .page{padding:10px;padding-top:60px}
+            .checkout-box{padding:16px 14px}
+            .paket-list{grid-template-columns:repeat(auto-fill,minmax(70px,1fr))}
+            .topup-payments{grid-template-columns:repeat(auto-fill,minmax(60px,1fr))}
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-animation"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+    <div class="logo"><i class="fas fa-crown"></i><span>TopUp<span style="-webkit-text-fill-color:var(--primary);">Pro</span></span></div>
+    <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+        <button id="wishlistBtn" style="position:relative;"><i class="fas fa-heart"></i><span class="badge-count" id="wishlistCount">0</span></button>
+        <button id="cartBtn" style="position:relative;"><i class="fas fa-shopping-cart"></i><span class="badge-count" id="cartCount">0</span></button>
+        <button id="profileBtn" class="profile-btn" style="display:none;">
+            <div class="avatar" id="navAvatar"><i class="fas fa-user"></i></div>
+            <span class="username" id="navUsername">User</span>
+            <span class="premium-badge-nav" id="navPremiumBadge" style="display:none;">PREMIUM</span>
+        </button>
+        <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </div>
+</nav>
+
+<!-- ================================================================ -->
+<!-- PAGE: BERANDA -->
+<!-- ================================================================ -->
+<div class="page active" id="page-beranda" style="padding-top:70px;">
+
+    <section class="hero">
+        <div class="hero-badge animate-fade"><i class="fas fa-bolt"></i> 40+ Produk • 300+ Pilihan Paket • Premium Member</div>
+        <h1 class="animate-fade" style="animation-delay:0.1s">Topup Game & <br/>Aplikasi </h1>
+        <p class="animate-fade" style="animation-delay:0.2s">Isi saldo game favoritmu, paket data, dan voucher digital dengan harga terbaik & proses kilat.</p>
+        <div class="hero-stats animate-fade" style="animation-delay:0.3s">
+            <div class="stat"><div class="number">100K+</div><div class="label">Transaksi Sukses</div></div>
+            <div class="stat"><div class="number">40+</div><div class="label">Produk Tersedia</div></div>
+            <div class="stat"><div class="number">4.9</div><div class="label">Rating Pengguna</div></div>
+        </div>
+    </section>
+
+    <div class="search-box animate-fade" style="animation-delay:0.4s">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Cari game, aplikasi, atau voucher..." />
+        <button class="btn-search" id="searchBtn"><i class="fas fa-arrow-right"></i> Cari</button>
+    </div>
+
+    <div class="filter-section animate-fade" style="animation-delay:0.5s" id="filterContainer">
+        <button class="filter-btn active" data-filter="all"><i class="fas fa-th"></i> Semua</button>
+        <button class="filter-btn" data-filter="game"><i class="fas fa-gamepad"></i> Game</button>
+        <button class="filter-btn" data-filter="app"><i class="fas fa-mobile-alt"></i> Aplikasi</button>
+        <button class="filter-btn" data-filter="voucher"><i class="fas fa-ticket-alt"></i> Voucher</button>
+        <button class="filter-btn" data-filter="popular"><i class="fas fa-fire"></i> Populer</button>
+        <button class="filter-btn" data-filter="sale"><i class="fas fa-tags"></i> Diskon</button>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+
+    <div class="features" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;max-width:1200px;margin:40px auto;padding:0 20px;">
+        <div class="glass" style="padding:24px 20px;text-align:center;border-radius:var(--radius-md);">
+            <i class="fas fa-bolt" style="font-size:32px;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;"></i>
+            <h4 style="font-size:0.95rem;margin-bottom:4px;">Proses Instan</h4>
+            <p style="font-size:0.8rem;color:var(--text-muted);">Topup langsung masuk dalam hitungan detik</p>
+        </div>
+        <div class="glass" style="padding:24px 20px;text-align:center;border-radius:var(--radius-md);">
+            <i class="fas fa-shield-alt" style="font-size:32px;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;"></i>
+            <h4 style="font-size:0.95rem;margin-bottom:4px;">Aman & Terpercaya</h4>
+            <p style="font-size:0.8rem;color:var(--text-muted);">Sistem keamanan berlapis & terverifikasi</p>
+        </div>
+        <div class="glass" style="padding:24px 20px;text-align:center;border-radius:var(--radius-md);">
+            <i class="fas fa-headset" style="font-size:32px;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;"></i>
+            <h4 style="font-size:0.95rem;margin-bottom:4px;">Support 24/7</h4>
+            <p style="font-size:0.8rem;color:var(--text-muted);">Tim customer service siap membantu kapan saja</p>
+        </div>
+        <div class="glass" style="padding:24px 20px;text-align:center;border-radius:var(--radius-md);">
+            <i class="fas fa-gem" style="font-size:32px;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;"></i>
+            <h4 style="font-size:0.95rem;margin-bottom:4px;">Harga Terbaik</h4>
+            <p style="font-size:0.8rem;color:var(--text-muted);">Harga kompetitif dengan promo setiap hari</p>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- PAGE: MUSIC (MP3) -->
+<!-- ================================================================ -->
+<div class="page" id="page-music" style="padding-top:70px;">
+    <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:1.2rem;font-weight:700;"><i class="fas fa-music" style="color:var(--primary);"></i> MP3 Player</h2>
+        <span class="see-all" onclick="showToast('Info','Full audio dari file MP3','info')" style="color:var(--primary-light);font-size:0.8rem;cursor:pointer;opacity:0.6;">Info</span>
+    </div>
+
+    <div class="mp3-player">
+        <div class="now-playing-audio">
+            <div class="left">
+                <i class="fas fa-music"></i>
+                <div class="info">
+                    <div class="title" id="nowTitle">Pilih lagu</div>
+                    <div class="artist" id="nowArtist">-</div>
+                </div>
+            </div>
+            <div class="right" id="nowStatus">⏸</div>
+        </div>
+        <div id="mp3Container"></div>
+    </div>
+
+    <div class="divider" style="height:1px;background:var(--glass-border);margin:20px 0;"></div>
+
+    <div class="playlist-section">
+        <div class="playlist-header">
+            <h3><i class="fas fa-list" style="color:var(--text-muted);"></i> Daftar Lagu</h3>
+            <span id="songCount">0 lagu</span>
+        </div>
+        <div id="playlistContainer"></div>
+    </div>
+
+    <div class="shortcut-info">
+        <span><i class="fas fa-arrow-left"></i> Prev</span>
+        <span><i class="fas fa-arrow-right"></i> Next</span>
+        <span><i class="fas fa-undo"></i> Click lagu</span>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- PAGE: GIFT -->
+<!-- ================================================================ -->
+<div class="page" id="page-gift" style="padding-top:70px;">
+    <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:1.2rem;font-weight:700;"><i class="fas fa-gift" style="color:var(--primary);"></i> Gift Card</h2>
+        <span class="see-all" onclick="showToast('Info','Buat Gift Card','info')" style="color:var(--primary-light);font-size:0.8rem;cursor:pointer;opacity:0.6;">Buat Gift Card →</span>
+    </div>
+    <div class="gift-grid" id="giftGrid"></div>
+</div>
+
+<!-- ================================================================ -->
+<!-- PAGE: EVENT -->
+<!-- ================================================================ -->
+<div class="page" id="page-event" style="padding-top:70px;">
+    <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:1.2rem;font-weight:700;"><i class="fas fa-trophy" style="color:var(--primary);"></i> Event Game</h2>
+        <span class="see-all" onclick="showToast('Info','Semua event tersedia','info')" style="color:var(--primary-light);font-size:0.8rem;cursor:pointer;opacity:0.6;">Lihat Semua →</span>
+    </div>
+    <div id="eventContainer"></div>
+</div>
+
+<!-- ================================================================ -->
+<!-- PAGE: PROFILE -->
+<!-- ================================================================ -->
+<div class="page" id="page-profil" style="padding-top:70px;">
+    <div class="profile-card">
+        <div class="profile-avatar-lg" id="profileAvatar"><i class="fas fa-user" id="avatarIcon"></i><img id="avatarImg" style="display:none;" /><input type="file" id="avatarInput" accept="image/*" style="display:none;" /></div>
+        <div class="profile-name" id="profileName">User</div>
+        <div class="profile-email" id="profileEmail">user@email.com</div>
+        <div class="profile-premium-badge free" id="profilePremium"> FREE MEMBER</div>
+        <div class="profile-stats">
+            <div class="pstat"><div class="pnum" id="profileOrders">0</div><div class="plabel">Pesanan</div></div>
+            <div class="pstat"><div class="pnum" id="profileWishlist">0</div><div class="plabel">Wishlist</div></div>
+            <div class="pstat"><div class="pnum" id="profilePoints">0</div><div class="plabel">Poin</div></div>
+        </div>
+        <div id="profileMenu">
+            <div class="profile-menu-item" onclick="showToast('Riwayat Transaksi','Lihat riwayat pemesanan','info')">
+                <div class="pmi-left"><i class="fas fa-history"></i><span>Riwayat Transaksi</span></div><span class="pmi-arrow">›</span>
+            </div>
+            <div class="profile-menu-item" onclick="showToast('Dompet Digital','Saldo: Rp 0','info')">
+                <div class="pmi-left"><i class="fas fa-wallet"></i><span>Dompet Digital</span></div><span class="pmi-arrow">›</span>
+            </div>
+            <div class="profile-menu-item" onclick="showToast('Voucher Saya','Belum ada voucher','info')">
+                <div class="pmi-left"><i class="fas fa-ticket-alt"></i><span>Voucher Saya</span></div><span class="pmi-arrow">›</span>
+            </div>
+            <div class="profile-menu-item" onclick="showToast('Pengaturan','Pengaturan akun','info')">
+                <div class="pmi-left"><i class="fas fa-cog"></i><span>Pengaturan</span></div><span class="pmi-arrow">›</span>
+            </div>
+            <div class="profile-menu-item" onclick="showToast('Bantuan','CS 24/7 siap membantu','info')">
+                <div class="pmi-left"><i class="fas fa-headset"></i><span>Bantuan & CS</span></div><span class="pmi-arrow">›</span>
+            </div>
+            <div class="profile-menu-item danger" id="logoutBtn">
+                <div class="pmi-left"><i class="fas fa-sign-out-alt"></i><span>Logout</span></div><span class="pmi-arrow">›</span>
+            </div>
+        </div>
+        <button class="btn-upgrade" id="btnUpgradePremium"><i class="fas fa-crown"></i> Upgrade ke Premium (Rp 99.000/bulan)</button>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- BOTTOM NAV -->
+<!-- ================================================================ -->
+<div class="bottom-nav">
+    <button class="nav-item active" data-page="beranda"><i class="fas fa-home"></i><span>Beranda</span></button>
+    <button class="nav-item" data-page="music"><i class="fas fa-music"></i><span>Music</span></button>
+    <button class="nav-item" data-page="gift"><i class="fas fa-gift"></i><span>Gift</span></button>
+    <button class="nav-item" data-page="event"><i class="fas fa-trophy"></i><span>Event</span></button>
+    <button class="nav-item" data-page="profil"><i class="fas fa-user"></i><span>Profil</span></button>
+</div>
+
+<!-- ================================================================ -->
+<!-- CHECKOUT MODAL -->
+<!-- ================================================================ -->
+<div class="checkout-modal" id="checkoutModal">
+    <div class="checkout-box">
+        <button class="checkout-close" id="checkoutClose"><i class="fas fa-times"></i></button>
+        <div class="checkout-title" id="checkoutTitle">Checkout</div>
+        <div class="checkout-sub" id="checkoutSub">Pilih paket dan metode pembayaran</div>
+        
+        <label><i class="fas fa-gamepad"></i> Pilih Produk</label>
+        <select id="selectProduct"><option value="">-- Pilih Produk --</option></select>
+
+        <label><i class="fas fa-box"></i> Pilih Paket <span class="required-star">*</span></label>
+        <div class="paket-list" id="paketList"><div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted);">Pilih produk terlebih dahulu</div></div>
+
+        <label><i class="fas fa-user"></i> ID / Username <span class="required-star">*</span></label>
+        <div class="topup-id-input">
+            <input type="text" id="topupUserId" placeholder="Masukkan ID atau username..." />
+        </div>
+        <div class="error-text" id="userIdError">⚠️ ID / Username harus diisi!</div>
+
+        <label><i class="fas fa-credit-card"></i> Metode Pembayaran <span class="required-star">*</span></label>
+        <div class="topup-payments" id="topupPayments"></div>
+
+        <div class="topup-summary">
+            <div class="summary-row"><span>Produk</span><span id="summaryProduct">-</span></div>
+            <div class="summary-row"><span>Paket</span><span id="summaryPackage">-</span></div>
+            <div class="summary-row"><span>ID</span><span id="summaryUserId">-</span></div>
+            <div class="summary-row"><span>Metode Bayar</span><span id="summaryPayment">-</span></div>
+            <div class="summary-row total"><span>Total Bayar</span><span class="total-price" id="summaryTotal">Rp 0</span></div>
+        </div>
+
+        <div class="topup-actions">
+            <button class="btn-cancel" id="btnCancelTopup"><i class="fas fa-times"></i> Batal</button>
+            <button class="btn-pay" id="btnPayTopup"><i class="fas fa-credit-card"></i> Bayar Sekarang</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- SUCCESS MODAL -->
+<!-- ================================================================ -->
+<div class="success-modal" id="successModal">
+    <div class="success-box">
+        <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="success-title">🎉 Pembayaran Berhasil!</div>
+        <div class="success-sub">Transaksi Anda telah berhasil diproses</div>
+        <div class="success-details">
+            <div class="sd-row"><span>Produk</span><span id="sProduct">-</span></div>
+            <div class="sd-row"><span>Paket</span><span id="sPackage">-</span></div>
+            <div class="sd-row"><span>ID</span><span id="sUserId">-</span></div>
+            <div class="sd-row"><span>Metode Bayar</span><span id="sPayment">-</span></div>
+            <div class="sd-row"><span>Status</span><span class="sd-status"><i class="fas fa-check-circle"></i> SUKSES</span></div>
+            <div class="sd-row total"><span>Total Dibayar</span><span class="sd-total" id="sTotal">Rp 0</span></div>
+        </div>
+        <button class="btn-success-close" id="btnSuccessClose"><i class="fas fa-home"></i> Kembali ke Beranda</button>
+    </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- AUTH MODAL -->
+<!-- ================================================================ -->
+<div class="auth-modal" id="authModal">
+    <div class="auth-box">
+        <button class="auth-close" id="authClose"><i class="fas fa-times"></i></button>
+        <div class="auth-header">
+            <div class="auth-icon"><i class="fas fa-user-circle"></i></div>
+            <h2>Selamat Datang</h2>
+            <p>Login atau daftar untuk pengalaman lebih baik</p>
+        </div>
+        <div class="auth-tabs"><button class="active" data-tab="login">Login</button><button data-tab="register">Daftar</button></div>
+        <div class="auth-form active" id="loginForm">
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="Masukkan email" />
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="Masukkan password" />
+            <button class="btn-auth" id="btnLogin">Login</button>
+        </div>
+        <div class="auth-form" id="registerForm">
+            <label>Nama Lengkap</label>
+            <input type="text" id="regName" placeholder="Masukkan nama lengkap" />
+            <label>Email</label>
+            <input type="email" id="regEmail" placeholder="Masukkan email" />
+            <label>Password</label>
+            <input type="password" id="regPassword" placeholder="Masukkan password" />
+            <label>Nomor HP</label>
+            <input type="tel" id="regPhone" placeholder="Masukkan nomor HP" />
+            <button class="btn-auth" id="btnRegister">Daftar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ================================================================
+// 1. PLAYLIST MP3 - GANTI LINK MP3 DI SINI!
+// ================================================================
+const playlistSongs = [
+    {id:1,title:'dengarlah cinta',artist:'Al ghazali,Chelsea Shania',url:'dengarlah cinta.mp3',emoji:'🎵'},
+    {id:2,title:'yang patah tumbuh,yang hilang brrganti',artist:'Mahalini',url:'yang patah tumbuh.mp3',emoji:'🎵'},
+    {id:3,title:'dengarlah bintang hatiku',artist:'Demeises',url:'dengarlah bintang hatiku.mp3',emoji:'🎵'},
+    {id:4,title:'manusia biasa (CLB)',artist:'Yovie & Nuno',url:'manusia biasa.mp3',emoji:'🎵'},
+    {id:5,title:'bukan pho',artist:'Keisya Levronka',url:'bukan pho.mp3',emoji:'🎵'}
+];
+
+// ================================================================
+// 2. DATA PRODUK - LOGO PAKE GAMBAR (GANTI LINK FOTO DI SINI!)
+// ================================================================
+function generatePackages(basePrice, count) {
+    const packages = [];
+    const labels = ['', '', '', '', '', '', '', '', '', ''];
+    for (let i = 1; i <= count; i++) {
+        const multiplier = i * 1.2 + 0.5;
+        const price = Math.round(basePrice * multiplier / 100) * 100;
+        const labelNum = i * 5;
+        let badge = null;
+        if (i === 1) badge = 'best';
+        else if (i === 3) badge = 'hemat';
+        else if (i === 5) badge = 'populer';
+        else if (i === 10) badge = 'populer';
+        else if (i === 15) badge = 'hemat';
+        packages.push({
+            label: `${labelNum} ${labels[i % labels.length]}`,
+            price: price > 0 ? price : 1000 * i,
+            badge: badge
+        });
+    }
+    return packages;
+}
+
+const productsData = [
+    {
+        id:1,
+        name:'Free Fire',
+        category:'game',
+        price:15000,
+        originalPrice:20000,
+        icon:'https://oceanslinkupl.rf.gd/uploads/927242f1b6c90f88519739acfb7acc9c.jpg',
+        color:'#FF6B35',
+        badge:'popular',
+        badgeText:'🔥 Populer',
+        rating:4.8,
+        reviews:1200,
+        packages:generatePackages(820,25)
+    },
+    {
+        id:2,
+        name:'Mobile Legends',
+        category:'game',
+        price:25000,
+        icon:'https://oceanslinkupl.rf.gd/uploads/97c68f5393694cf66499c6e088754815.jpg',
+        color:'#6C63FF',
+        badge:'popular',
+        badgeText:'🔥 Populer',
+        rating:4.9,
+        reviews:2000,
+        packages:generatePackages(1500,22)
+    },
+    {
+        id:3,
+        name:'PUBG Mobile',
+        category:'game',
+        price:18000,
+        originalPrice:25000,
+        icon:'https://oceanslinkupl.rf.gd/uploads/61e70437849afae4333efffea1f2f5a0.jpg',
+        color:'#FFD93D',
+        badge:'sale',
+        badgeText:'💸 Diskon',
+        rating:4.6,
+        reviews:800,
+        packages:generatePackages(1500,25)
+    },
+    {
+        id:4,
+        name:'Genshin Impact',
+        category:'game',
+        price:50000,
+        icon:'https://oceanslinkupl.rf.gd/uploads/ece7db75e6cd688a2f50ef5cf4f3e4f4.jpg',
+        color:'#00D2FF',
+        badge:'new',
+        badgeText:'✨ New',
+        rating:4.7,
+        reviews:600,
+        packages:generatePackages(1500,20)
+    },
+    {
+        id:5,
+        name:'Valorant',
+        category:'game',
+        price:32000,
+        icon:'https://oceanslinkupl.rf.gd/uploads/4549de63a09239d11eac2b8ebb617e24.jpg',
+        color:'#FD79A8',
+        badge:null,
+        rating:4.6,
+        reviews:500,
+        packages:generatePackages(1500,20)
+    },
+    {
+        id:6,
+        name:'WhatsApp',
+        category:'app',
+        price:5000,
+        icon:'https://oceanslinkupl.rf.gd/uploads/3ad7f8a00a87eb78f2f5077899e5326d.jpg',
+        color:'#25D366',
+        badge:null,
+        rating:4.5,
+        reviews:400,
+        packages:generatePackages(500,25)
+    },
+    {
+        id:7,
+        name:'Netflix',
+        category:'app',
+        price:55000,
+        originalPrice:70000,
+        icon:'https://oceanslinkupl.rf.gd/uploads/81a33618b52ba41ed5df23e1f39a5c58.jpg',
+        color:'#E50914',
+        badge:'sale',
+        badgeText:'💸 Diskon',
+        rating:4.9,
+        reviews:2000,
+        packages:generatePackages(2000,20)
+    },
+    {
+        id:8,
+        name:'Google Play',
+        category:'voucher',
+        price:120000,
+        originalPrice:150000,
+        icon:'https://oceanslinkupl.rf.gd/uploads/72d750300efd02689cf0125cad93e843.jpg',
+        color:'#34a853',
+        badge:'sale',
+        badgeText:'💸 Diskon',
+        rating:4.9,
+        reviews:1500,
+        packages:generatePackages(10000,20)
+    },
+    {
+        id:9,
+        name:'Steam Wallet',
+        category:'voucher',
+        price:100000,
+        icon:'https://oceanslinkupl.rf.gd/uploads/f7d577fb852f2ef6da3cdf7886002843.jpg',
+        color:'#1b2838',
+        badge:'popular',
+        badgeText:'🔥 Populer',
+        rating:4.7,
+        reviews:700,
+        packages:generatePackages(17000,20)
+    },
+    {
+        id:10,
+        name:'Apple Store',
+        category:'voucher',
+        price:150000,
+        icon:'https://oceanslinkupl.rf.gd/uploads/5688100640de33192e725aef914fe0cc.jpg',
+        color:'#555',
+        badge:null,
+        rating:4.8,
+        reviews:900,
+        packages:generatePackages(8500,20)
+    }
+];
+
+// ================================================================
+// 3. PAYMENT METHODS - PAKE LOGO GAMBAR
+// ================================================================
+const paymentMethods = [
+    {id:'bca',name:'BCA',icon:'https://oceanslinkupl.rf.gd/uploads/efe39a34efc7a965db9129d250326a75.jpg',color:'#0055A4'},
+    {id:'bni',name:'BNI',icon:'https://oceanslinkupl.rf.gd/uploads/badec58a1d920db4608a32a9e92223bd.jpg',color:'#1B3A5C'},
+    {id:'mandiri',name:'Mandiri',icon:'https://oceanslinkupl.rf.gd/uploads/26f5e9c0a5e5cbf6a14869e55915e279.jpg',color:'#004B8F'},
+    {id:'gopay',name:'GoPay',icon:'https://oceanslinkupl.rf.gd/uploads/ed34169b878d47709ec7e213a53917c9.jpg',color:'#00A9B4'},
+    {id:'ovo',name:'OVO',icon:'https://oceanslinkupl.rf.gd/uploads/aaed87cef58279f3943b78dba7f4c562.jpg',color:'#3F9CFF'},
+    {id:'dana',name:'DANA',icon:'https://oceanslinkupl.rf.gd/uploads/f6f0dd87e8d33e95d787e273f51cb0f8.jpg',color:'#005BAB'},
+    {id:'qris',name:'QRIS',icon:'https://oceanslinkupl.rf.gd/uploads/3c1017b025342afb86f7db4c77a75369.jpg',color:'#2E7D32'},
+    {id:'shopeepay',name:'ShopeePay',icon:'https://oceanslinkupl.rf.gd/uploads/83b9bd1e41fedafdc7e8787eabff1735.jpg',color:'#EE4D2D'}
+];
+
+// ================================================================
+// 4. STATE
+// ================================================================
+let currentUser = null;
+let state = {cart:[], wishlist:[], history:[], currentFilter:'all', searchQuery:''};
+let selectedProduct = null, selectedPackage = null, selectedPayment = null, isProcessing = false, currentIndex = 0;
+
+// ================================================================
+// 5. TOAST
+// ================================================================
+function showToast(title, message, type='info', duration=3000){
+    const container = document.getElementById('toastContainer');
+    const icons = {success:'fa-check-circle', error:'fa-exclamation-circle', warning:'fa-exclamation-triangle', info:'fa-info-circle'};
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<div class="toast-icon ${type}"><i class="fas ${icons[type]||icons.info}"></i></div><div class="toast-content"><div class="toast-title">${title}</div><div class="toast-message">${message}</div></div><button class="toast-close"><i class="fas fa-times"></i></button>`;
+    container.appendChild(toast);
+    toast.querySelector('.toast-close').addEventListener('click', ()=>{toast.classList.add('removing'); setTimeout(()=>toast.remove(),500);});
+    setTimeout(()=>{toast.classList.add('removing'); setTimeout(()=>toast.remove(),500);}, duration);
+}
+
+// ================================================================
+// 6. MP3 FUNCTIONS
+// ================================================================
+function playSong(index){
+    const song = playlistSongs[index]; if(!song) return;
+    currentIndex = index;
+    document.getElementById('nowTitle').textContent = song.title;
+    document.getElementById('nowArtist').textContent = song.artist;
+    document.getElementById('nowStatus').textContent = '▶';
+    document.querySelectorAll('.playlist-item').forEach((item,i)=>{
+        item.classList.toggle('active',i===index);
+        const status=item.querySelector('.pl-status');
+        status.innerHTML = i===index ? '<i class="fas fa-play" style="color:#6C63FF;"></i>' : '<i class="fas fa-music"></i>';
+    });
+    const container = document.getElementById('mp3Container');
+    container.innerHTML = `<audio controls autoplay style="width:100%;border-radius:12px;"><source src="${song.url}" type="audio/mpeg"></audio>`;
+    showToast('🎵 Memutar', `${song.title} - ${song.artist}`, 'success');
+}
+function nextSong(){const nextIndex=(currentIndex+1)%playlistSongs.length; playSong(nextIndex);}
+function prevSong(){const prevIndex=(currentIndex-1+playlistSongs.length)%playlistSongs.length; playSong(prevIndex);}
+function renderPlaylist(){
+    const container = document.getElementById('playlistContainer'); container.innerHTML='';
+    playlistSongs.forEach((song,index)=>{
+        const item = document.createElement('div');
+        item.className = 'playlist-item' + (index===currentIndex?' active':'');
+        item.dataset.index = index;
+        const isActive = index===currentIndex;
+        item.innerHTML = `<div class="pl-left"><span class="pl-num">${String(index+1).padStart(2,'0')}</span><div><div class="pl-title">${song.emoji} ${song.title}</div><div class="pl-artist">${song.artist}</div></div></div><div class="pl-right"><span class="pl-status">${isActive?'<i class="fas fa-play" style="color:#6C63FF;"></i>':'<i class="fas fa-music"></i>'}</span><button class="btn-play-now" data-index="${index}">Putar</button></div>`;
+        item.addEventListener('click', function(){const idx=parseInt(this.dataset.index); playSong(idx);});
+        container.appendChild(item);
+    });
+    document.querySelectorAll('.btn-play-now').forEach(btn=>{btn.addEventListener('click', function(e){e.stopPropagation(); const idx=parseInt(this.dataset.index); playSong(idx);});});
+    document.getElementById('songCount').textContent = playlistSongs.length + ' lagu';
+}
+
+// ================================================================
+// 7. PRODUCT FUNCTIONS
+// ================================================================
+function renderProducts(){
+    const grid = document.getElementById('productGrid'); if(!grid) return; grid.innerHTML='';
+    let filtered = productsData.filter(p=>{
+        const matchFilter = state.currentFilter==='all' || p.category===state.currentFilter || (state.currentFilter==='popular' && p.badge==='popular') || (state.currentFilter==='sale' && p.badge==='sale');
+        const matchSearch = p.name.toLowerCase().includes(state.searchQuery.toLowerCase());
+        return matchFilter && matchSearch;
+    });
+    if(filtered.length===0){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-secondary);"><i class="fas fa-search" style="font-size:3rem;color:var(--text-muted);display:block;margin-bottom:16px;"></i><h3>Tidak ada produk yang cocok</h3><p style="color:var(--text-muted);margin-top:8px;">Coba ubah filter atau kata kunci pencarian</p></div>'; return;}
+    filtered.forEach((p,index)=>{
+        const card=document.createElement('div'); card.className='product-card glass'; card.style.animationDelay=`${index*0.05}s`;
+        let badgeHTML=''; if(p.badge) badgeHTML=`<span class="badge ${p.badge}">${p.badgeText||p.badge}</span>`;
+        const wishlistActive = state.wishlist.includes(p.id)?'active':'';
+        const isImage = p.icon && (p.icon.startsWith('http') || p.icon.startsWith('data:image'));
+        const iconHTML = isImage ? `<img src="${p.icon}" alt="${p.name}" />` : `<i class="fas ${p.icon}"></i>`;
+        const paketCount = p.packages ? p.packages.length : 0;
+        card.innerHTML = `
+            ${badgeHTML}
+            <button class="wishlist-btn ${wishlistActive}" onclick="event.stopPropagation();toggleWishlist(${p.id})">
+                <i class="fas fa-heart"></i>
+            </button>
+            <div class="product-icon" style="color:${p.color};background:${p.color}20;">
+                ${iconHTML}
+            </div>
+            <h3>${p.name}</h3>
+            <div class="rating">${'★'.repeat(Math.floor(p.rating||0))}${(p.rating%1)>=0.5?'★':''}<span>(${p.reviews||0})</span></div>
+            <div class="price">Rp ${p.price.toLocaleString()}${p.originalPrice?`<span class="original-price">Rp ${p.originalPrice.toLocaleString()}</span>`:''}</div>
+            <span class="category-tag">${p.category}</span>
+            <div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;">📦 ${paketCount} paket</div>
+            <button class="btn-order" onclick="event.stopPropagation();openCheckout(${p.id})"><i class="fas fa-shopping-cart"></i> Topup</button>
+        `;
+        grid.appendChild(card);
+    });
+}
+function toggleWishlist(productId){
+    const index=state.wishlist.indexOf(productId);
+    if(index>-1){state.wishlist.splice(index,1); showToast('Dihapus','Produk dihapus dari wishlist','info');}
+    else{state.wishlist.push(productId); const product=productsData.find(p=>p.id===productId); showToast('Ditambahkan!',`${product.name} ditambahkan ke wishlist`,'success');}
+    updateWishlistUI(); renderProducts();
+}
+function updateWishlistUI(){document.getElementById('wishlistCount').textContent=state.wishlist.length; document.getElementById('profileWishlist').textContent=state.wishlist.length;}
+function getCartCount(){return state.cart.reduce((sum,item)=>sum+item.qty,0);}
+function updateCartUI(){document.getElementById('cartCount').textContent=getCartCount();}
+function addHistory(productName,price){state.history.unshift({id:Date.now()+Math.random().toString(36).substr(2,5),productName,price,date:new Date().toLocaleString('id-ID')}); if(state.history.length>50) state.history.pop(); if(currentUser) saveUser(); document.getElementById('profileOrders').textContent=state.history.length; document.getElementById('profilePoints').textContent=Math.floor(state.history.length*10);}
+
+// ================================================================
+// 8. CHECKOUT FUNCTIONS - DENGAN VALIDASI
+// ================================================================
+function openCheckout(productId){
+    const product = productsData.find(p=>p.id===productId);
+    if(!product) return;
+    document.getElementById('checkoutTitle').textContent = 'Checkout ' + product.name;
+    document.getElementById('checkoutSub').textContent = `${product.packages.length} paket tersedia • Mulai Rp ${product.price.toLocaleString()}`;
+    document.getElementById('selectProduct').value = productId;
+    document.getElementById('topupUserId').value = '';
+    document.getElementById('userIdError').classList.remove('show');
+    document.getElementById('topupUserId').classList.remove('error');
+    selectedProduct = product;
+    selectedPackage = product.packages && product.packages.length>0 ? product.packages[0] : null;
+    selectedPayment = paymentMethods[0];
+    renderPackages();
+    renderPayments();
+    updateTopupSummary();
+    document.getElementById('checkoutModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    showToast('📦 Checkout', `${product.name} siap dipesan!`, 'info');
+}
+function closeCheckout(){
+    document.getElementById('checkoutModal').classList.remove('active');
+    document.body.style.overflow = '';
+    document.getElementById('userIdError').classList.remove('show');
+    document.getElementById('topupUserId').classList.remove('error');
+}
+function renderProductSelect(){
+    const select = document.getElementById('selectProduct');
+    select.innerHTML = '<option value="">-- Pilih Produk --</option>';
+    productsData.forEach(p=>{
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.name} (${p.packages.length} paket)`;
+        select.appendChild(opt);
+    });
+    select.addEventListener('change', function(){
+        const id = parseInt(this.value);
+        if(id){
+            const product = productsData.find(p=>p.id===id);
+            if(product){
+                selectedProduct = product;
+                selectedPackage = product.packages && product.packages.length>0 ? product.packages[0] : null;
+                selectedPayment = paymentMethods[0];
+                renderPackages();
+                updateTopupSummary();
+                document.getElementById('topupUserId').value = '';
+                document.getElementById('userIdError').classList.remove('show');
+                document.getElementById('topupUserId').classList.remove('error');
+                document.getElementById('checkoutTitle').textContent = 'Checkout ' + product.name;
+                document.getElementById('checkoutSub').textContent = `${product.packages.length} paket tersedia • Mulai Rp ${product.price.toLocaleString()}`;
+            }
+        }else{
+            selectedProduct = null;
+            selectedPackage = null;
+            document.getElementById('paketList').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted);">Pilih produk terlebih dahulu</div>';
+            updateTopupSummary();
+        }
+    });
+}
+function renderPackages(){
+    const container = document.getElementById('paketList');
+    container.innerHTML = '';
+    if(!selectedProduct || !selectedProduct.packages || selectedProduct.packages.length===0){
+        container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted);">Tidak ada paket</div>';
+        return;
+    }
+    selectedProduct.packages.forEach((pkg, idx)=>{
+        const div = document.createElement('div');
+        div.className = `paket-item ${idx===0?'active':''}`;
+        const badgeClass = pkg.badge || '';
+        div.innerHTML = `<div class="pkg-price">Rp ${pkg.price.toLocaleString()}</div><div class="pkg-label">${pkg.label}</div>${badgeClass?`<div class="pkg-badge ${badgeClass}">${badgeClass.toUpperCase()}</div>`:''}`;
+        div.addEventListener('click', function(){
+            document.querySelectorAll('.paket-item').forEach(el=>el.classList.remove('active'));
+            this.classList.add('active');
+            selectedPackage = pkg;
+            updateTopupSummary();
+        });
+        container.appendChild(div);
+    });
+}
+function renderPayments(){
+    const container = document.getElementById('topupPayments');
+    container.innerHTML = '';
+    paymentMethods.forEach((pm, idx)=>{
+        const div = document.createElement('div');
+        div.className = `topup-payment ${idx===0?'active':''}`;
+        div.innerHTML = `<img src="${pm.icon}" alt="${pm.name}" /><span class="pm-name">${pm.name}</span>`;
+        div.addEventListener('click', function(){
+            document.querySelectorAll('.topup-payment').forEach(el=>el.classList.remove('active'));
+            this.classList.add('active');
+            selectedPayment = pm;
+            updateTopupSummary();
+        });
+        container.appendChild(div);
+    });
+}
+function updateTopupSummary(){
+    if(!selectedProduct){
+        document.getElementById('summaryProduct').textContent='-';
+        document.getElementById('summaryPackage').textContent='-';
+        document.getElementById('summaryUserId').textContent='-';
+        document.getElementById('summaryPayment').textContent='-';
+        document.getElementById('summaryTotal').textContent='Rp 0';
+        return;
+    }
+    const pkg = selectedPackage || {label:'Standar', price:selectedProduct.price};
+    const pm = selectedPayment || paymentMethods[0];
+    const userIdValue = document.getElementById('topupUserId').value || '-';
+    document.getElementById('summaryProduct').textContent = selectedProduct.name;
+    document.getElementById('summaryPackage').textContent = pkg.label;
+    document.getElementById('summaryUserId').textContent = userIdValue;
+    document.getElementById('summaryPayment').textContent = pm.name;
+    document.getElementById('summaryTotal').textContent = `Rp ${pkg.price.toLocaleString()}`;
+}
+function showSuccess(productName,packageLabel,userIdVal,paymentName,total){
+    document.getElementById('sProduct').textContent=productName;
+    document.getElementById('sPackage').textContent=packageLabel;
+    document.getElementById('sUserId').textContent=userIdVal;
+    document.getElementById('sPayment').textContent=paymentName;
+    document.getElementById('sTotal').textContent=`Rp ${total.toLocaleString()}`;
+    document.getElementById('successModal').classList.add('active');
+    document.body.style.overflow='hidden';
+}
+function closeSuccess(){document.getElementById('successModal').classList.remove('active'); document.body.style.overflow='';}
+
+// ================================================================
+// 9. USER FUNCTIONS
+// ================================================================
+function loadUser(){const saved=localStorage.getItem('topupUser'); if(saved){try{currentUser=JSON.parse(saved); state.wishlist=currentUser.wishlist||[]; state.history=currentUser.history||[]; updateUIForUser(); return true;}catch(e){}} return false;}
+function saveUser(){if(currentUser){currentUser.wishlist=state.wishlist; currentUser.history=state.history; localStorage.setItem('topupUser',JSON.stringify(currentUser));}}
+function updateUIForUser(){
+    if(currentUser){
+        document.getElementById('loginBtn').style.display='none';
+        document.getElementById('profileBtn').style.display='flex';
+        document.getElementById('navUsername').textContent=currentUser.name||'User';
+        if(currentUser.avatar){document.getElementById('navAvatar').innerHTML=`<img src="${currentUser.avatar}" />`;}else{document.getElementById('navAvatar').innerHTML='<i class="fas fa-user"></i>';}
+        document.getElementById('navPremiumBadge').style.display=currentUser.isPremium?'inline':'none';
+        document.getElementById('profileName').textContent=currentUser.name||'User';
+        document.getElementById('profileEmail').textContent=currentUser.email||'user@email.com';
+        if(currentUser.avatar){document.getElementById('avatarImg').src=currentUser.avatar; document.getElementById('avatarImg').style.display='block'; document.getElementById('avatarIcon').style.display='none';}else{document.getElementById('avatarImg').style.display='none'; document.getElementById('avatarIcon').style.display='block';}
+        document.getElementById('profileOrders').textContent=state.history.length||0;
+        document.getElementById('profileWishlist').textContent=state.wishlist.length||0;
+        document.getElementById('profilePoints').textContent=Math.floor(state.history.length*10)||0;
+        const premiumDiv=document.getElementById('profilePremium');
+        if(currentUser.isPremium){premiumDiv.className='profile-premium-badge premium'; premiumDiv.textContent='PREMIUM MEMBER';}else{premiumDiv.className='profile-premium-badge free'; premiumDiv.textContent='FREE MEMBER';}
+        document.getElementById('btnUpgradePremium').disabled=currentUser.isPremium;
+        document.getElementById('btnUpgradePremium').innerHTML=currentUser.isPremium?'<i class="fas fa-crown"></i> udah Premium':'<i class="fas fa-crown"></i> Upgrade ke Premium (Rp 99.000/bulan)';
+    }else{document.getElementById('loginBtn').style.display='block'; document.getElementById('profileBtn').style.display='none';}
+    updateWishlistUI(); updateCartUI();
+}
+function logoutUser(){currentUser=null; localStorage.removeItem('topupUser'); updateUIForUser(); showToast('Logout','Anda telah logout','info'); renderProducts();}
+
+// ================================================================
+// 
+function renderEvents(){
+    const container=document.getElementById('eventContainer'); if(!container) return;
+    const events=[{title:'MPL Season 13',desc:'Prediksi pemenang & dapatkan skin eksklusif!',color:'#6C63FF'},{title:'Free Fire Booyah Pass',desc:'Beli pass + dapatkan gift card gratis!',color:'#FF6B35'},{title:'Mobile Legends M-World',desc:'Topup & dapatkan skin eksklusif terbatas!',color:'#FDCB6E'},{title:'PUBG Mobile Royale Pass',desc:'Dapatkan hadiah spesial setiap level!',color:'#00D2FF'}];
+    container.innerHTML=''; events.forEach(e=>{const card=document.createElement('div'); card.className='event-card'; card.style.borderLeftColor=e.color; card.innerHTML=`<div class="event-title">${e.title}</div><div class="event-desc">${e.desc}</div><button class="btn-event" onclick="event.stopPropagation();showToast('Event','Berhasil mengikuti ${e.title}!','success')"><i class="fas fa-arrow-right"></i> Ikuti Event</button>`; container.appendChild(card);});
+}
+
+// ================================================================
+// 11. EVENT LISTENERS
+// ================================================================
+document.querySelectorAll('.bottom-nav .nav-item').forEach(item=>{item.addEventListener('click',function(){const page=this.dataset.page; document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>n.classList.remove('active')); this.classList.add('active'); document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); const target=document.getElementById('page-'+page); if(target){target.classList.add('active'); target.style.animation='none'; requestAnimationFrame(()=>{target.style.animation='fadeInUp 0.6s ease';});} if(page==='music') renderPlaylist(); if(page==='gift') renderGiftCards(); if(page==='event') renderEvents(); if(page==='profil') updateUIForUser();});});
+
+document.getElementById('checkoutClose').addEventListener('click', closeCheckout);
+document.getElementById('btnCancelTopup').addEventListener('click', closeCheckout);
+document.getElementById('checkoutModal').addEventListener('click', function(e){if(e.target===this) closeCheckout();});
+
+document.getElementById('btnPayTopup').addEventListener('click', function(e){
+    e.preventDefault();
+    if(isProcessing) return;
+    
+    // ===== VALIDASI =====
+    let valid = true;
+    
+    // Cek produk
+    if(!selectedProduct){
+        showToast('⚠️ Error','Pilih produk terlebih dahulu!','warning');
+        valid = false;
+    }
+    
+    // Cek paket
+    if(!selectedPackage){
+        showToast('⚠️ Error','Pilih paket terlebih dahulu!','warning');
+        valid = false;
+    }
+    
+    // Cek ID / Username
+    const userIdValue = document.getElementById('topupUserId').value.trim();
+    if(!userIdValue){
+        document.getElementById('topupUserId').classList.add('error');
+        document.getElementById('userIdError').classList.add('show');
+        valid = false;
+    } else {
+        document.getElementById('topupUserId').classList.remove('error');
+        document.getElementById('userIdError').classList.remove('show');
+    }
+    
+    // Cek metode pembayaran
+    if(!selectedPayment){
+        showToast('⚠️ Error','Pilih metode pembayaran!','warning');
+        valid = false;
+    }
+    
+    if(!valid) return;
+    
+    const pkg = selectedPackage || {label:'Standar', price:selectedProduct.price};
+    const btn = this;
+    isProcessing=true; btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Memproses...';
+    
+    setTimeout(function(){
+        try{
+            const total = pkg.price;
+            state.cart.push({productId:selectedProduct.id,qty:1});
+            addHistory(`${selectedProduct.name} - ${pkg.label} (ID: ${userIdValue})`, total);
+            updateCartUI();
+            showSuccess(selectedProduct.name, pkg.label, userIdValue, selectedPayment.name, total);
+            btn.disabled=false; btn.innerHTML='<i class="fas fa-credit-card"></i> Bayar Sekarang';
+            isProcessing=false;
+            closeCheckout();
+            renderProducts();
+            showToast('✅ Sukses!','Pembayaran berhasil diproses!','success');
+        }catch(err){
+            console.error('Payment error:', err);
+            showToast('❌ Error','Terjadi kesalahan saat pemrosesan!','error');
+            btn.disabled=false; btn.innerHTML='<i class="fas fa-credit-card"></i> Bayar Sekarang';
+            isProcessing=false;
+        }
+    }, 1500);
+});
+
+document.getElementById('btnSuccessClose').addEventListener('click',function(){
+    closeSuccess();
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>n.classList.remove('active'));
+    document.querySelector('.bottom-nav .nav-item[data-page="beranda"]').classList.add('active');
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-beranda').classList.add('active');
+});
+
+let darkMode=true; document.getElementById('themeToggle').addEventListener('click',function(){darkMode=!darkMode; document.documentElement.setAttribute('data-theme',darkMode?'dark':'light'); this.innerHTML=darkMode?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>'; localStorage.setItem('theme',darkMode?'dark':'light');});
+const savedTheme=localStorage.getItem('theme'); if(savedTheme){darkMode=savedTheme==='dark'; document.documentElement.setAttribute('data-theme',savedTheme); document.getElementById('themeToggle').innerHTML=darkMode?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>';}
+
+window.addEventListener('scroll',function(){const navbar=document.getElementById('navbar'); if(window.scrollY>50) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled');});
+
+document.getElementById('searchInput').addEventListener('input',function(e){state.searchQuery=e.target.value; renderProducts();});
+document.getElementById('searchBtn').addEventListener('click',function(){state.searchQuery=document.getElementById('searchInput').value; renderProducts();});
+document.getElementById('searchInput').addEventListener('keypress',function(e){if(e.key==='Enter'){state.searchQuery=document.getElementById('searchInput').value; renderProducts();}});
+
+document.getElementById('filterContainer').addEventListener('click',function(e){const btn=e.target.closest('.filter-btn'); if(!btn) return; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); state.currentFilter=btn.dataset.filter; renderProducts();});
+
+document.getElementById('loginBtn').addEventListener('click',function(){document.getElementById('authModal').classList.add('active'); document.body.style.overflow='hidden';});
+document.getElementById('authClose').addEventListener('click',function(){document.getElementById('authModal').classList.remove('active'); document.body.style.overflow='';});
+document.getElementById('authModal').addEventListener('click',function(e){if(e.target===this){document.getElementById('authModal').classList.remove('active'); document.body.style.overflow='';}});
+
+document.querySelectorAll('.auth-tabs button').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('.auth-tabs button').forEach(b=>b.classList.remove('active')); this.classList.add('active'); document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active')); document.getElementById(this.dataset.tab+'Form').classList.add('active');});});
+
+document.getElementById('btnLogin').addEventListener('click',function(){const email=document.getElementById('loginEmail').value.trim(); const password=document.getElementById('loginPassword').value.trim(); if(!email||!password){showToast('⚠️ Error','Harap isi semua field!','warning'); return;} const saved=localStorage.getItem('topupUser'); if(saved){try{const user=JSON.parse(saved); if(user.email===email && user.password===password){currentUser=user; state.wishlist=user.wishlist||[]; state.history=user.history||[]; saveUser(); updateUIForUser(); document.getElementById('authModal').classList.remove('active'); document.body.style.overflow=''; renderProducts(); showToast('✅ Login Berhasil!',`Selamat datang kembali, ${user.name}!`,'success'); return;}}catch(e){}} showToast('⚠️ Error','Email atau password salah!','error');});
+
+document.getElementById('btnRegister').addEventListener('click',function(){const name=document.getElementById('regName').value.trim(); const email=document.getElementById('regEmail').value.trim(); const password=document.getElementById('regPassword').value.trim(); const phone=document.getElementById('regPhone').value.trim(); if(!name||!email||!password||!phone){showToast('⚠️ Error','Harap isi semua field!','warning'); return;} currentUser={name,email,password,phone,avatar:null,isPremium:false,wishlist:[],history:[],joined:new Date().toISOString()}; state.wishlist=[]; state.history=[]; saveUser(); updateUIForUser(); document.getElementById('authModal').classList.remove('active'); document.body.style.overflow=''; renderProducts(); showToast('✅ Registrasi Berhasil!',`Selamat datang, ${name}!`,'success');});
+
+document.getElementById('profileBtn').addEventListener('click',function(){if(!currentUser){document.getElementById('authModal').classList.add('active'); document.body.style.overflow='hidden'; return;} document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>n.classList.remove('active')); document.querySelector('.bottom-nav .nav-item[data-page="profil"]').classList.add('active'); document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById('page-profil').classList.add('active'); updateUIForUser();});
+document.getElementById('logoutBtn').addEventListener('click',logoutUser);
+
+document.getElementById('btnUpgradePremium').addEventListener('click',function(){if(!currentUser){showToast('⚠️ Error','Harap login terlebih dahulu!','warning'); return;} if(currentUser.isPremium){showToast('Info','Anda sudah menjadi Premium Member!','info'); return;} const btn=this; btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Memproses...'; setTimeout(function(){currentUser.isPremium=true; saveUser(); updateUIForUser(); showToast('⭐ Premium!','Selamat! Anda sekarang adalah Premium Member!','success'); btn.disabled=false; btn.innerHTML='<i class="fas fa-crown"></i> ✅ Sudah Premium'; renderProducts();},2000);});
+
+document.getElementById('profileAvatar').addEventListener('click',function(){document.getElementById('avatarInput').click();});
+document.getElementById('avatarInput').addEventListener('change',function(e){const file=this.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=function(event){if(currentUser){currentUser.avatar=event.target.result; saveUser(); updateUIForUser(); showToast('✅ Berhasil!','Foto profil berhasil diupdate','success');}}; reader.readAsDataURL(file);});
+
+document.getElementById('cartBtn').addEventListener('click',function(){const count=getCartCount(); if(count===0){showToast('Keranjang Kosong','Belum ada produk di keranjang','info'); return;} showToast('🛒 Keranjang',`${count} produk di keranjang`,'success');});
+document.getElementById('wishlistBtn').addEventListener('click',function(){const count=state.wishlist.length; if(count===0){showToast('Wishlist Kosong','Belum ada produk di wishlist','info'); return;} showToast('❤️ Wishlist',`${count} produk di wishlist`,'success');});
+
+document.getElementById('topupUserId').addEventListener('input', function(){
+    if(this.value.trim()){
+        this.classList.remove('error');
+        document.getElementById('userIdError').classList.remove('show');
+    }
+    updateTopupSummary();
+});
+
+document.addEventListener('keydown',function(e){if(e.target.tagName==='INPUT') return; if(e.code==='ArrowRight'){e.preventDefault(); nextSong();} if(e.code==='ArrowLeft'){e.preventDefault(); prevSong();} if(e.key==='Escape'){closeCheckout(); if(document.getElementById('successModal').classList.contains('active')) closeSuccess(); if(document.getElementById('authModal').classList.contains('active')){document.getElementById('authModal').classList.remove('active'); document.body.style.overflow='';}}});
+
+function initAutoplay(){
+    if(document.readyState==='complete'){setTimeout(function(){if(playlistSongs.length>0){playSong(0);}},1500);}
+    else{window.addEventListener('load',function(){setTimeout(function(){if(playlistSongs.length>0){playSong(0);}},1500);});}
+}
+
+// ================================================================
+// 12. INIT
+// ================================================================
+loadUser();
+renderProducts();
+renderPlaylist();
+renderGiftCards();
+renderEvents();
+renderProductSelect();
+renderPayments();
+updateWishlistUI();
+updateCartUI();
+initAutoplay();
+
+console.log('🚀 TopUpPro Premium siap!');
+console.log('✅ Login & Register work');
+console.log('✅ Bayar Sekarang harus isi ID dulu');
+console.log('✅ Validasi semua field');
+console.log('✅ Liquid Glass + Animasi');
+console.log('✅ Semua fitur work!');
+</script>
+</body>
+</html>
